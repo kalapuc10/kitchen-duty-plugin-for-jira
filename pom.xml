@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>by.kalaputs</groupId>
     <artifactId>kitchen-duty-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    
     <organization>
         <name>Example Company</name>
         <url>http://www.example.com/</url>
     </organization>
-    
     <name>kitchen-duty-plugin</name>
     <description>This is the by.kalaputs:kitchen-duty-plugin plugin for Atlassian JIRA.</description>
     <packaging>atlassian-plugin</packaging>
-    
     <dependencies>
         <dependency>
             <groupId>com.atlassian.jira</groupId>
@@ -36,7 +30,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -91,8 +85,25 @@
             <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-    
     <build>
         <plugins>
             <plugin>
@@ -113,25 +124,30 @@
                         </pluginArtifact>
                     </pluginArtifacts>
                     -->
+                    <compressResources>false</compressResources>
                     <enableQuickReload>true</enableQuickReload>
-                    
+                    <jvmArgs>-Xms4g -Xmx8g</jvmArgs>
+                    <skipITs>true</skipITs>
+                    <skipUTs>true</skipUTs>
+                    <skipAllPrompts>true</skipAllPrompts>
+                    <!-- This is sometimes handy to turn on for a faster jira and quick reload-->
+                    <skipRestDocGeneration>true</skipRestDocGeneration>
+                    <skipManifestValidation>true</skipManifestValidation>
+                    <buildTestPlugin>false</buildTestPlugin>
+                    <enableDevToolbox>false</enableDevToolbox>
+                    <enablePde>false</enablePde>
+                    <extractDependencies>false</extractDependencies>
+                    <systemProperties>
+                        <atlassian.dev.mode>false</atlassian.dev.mode>
+                    </systemProperties>
                     <!-- See here for an explanation of default instructions: -->
                     <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
                     <instructions>
                         <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
-                        
                         <!-- Add package to export here -->
-                        <Export-Package>
-                            by.kalaputs.kitchen.duty.api,
-                        </Export-Package>
-                        
+                        <Export-Package>by.kalaputs.kitchen.duty.api,</Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>
-                            org.springframework.osgi.*;resolution:="optional",
-                            org.eclipse.gemini.blueprint.*;resolution:="optional",
-                            *
-                        </Import-Package>
-                        
+                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
                         <!-- Ensure plugin is spring powered -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>
@@ -167,21 +183,41 @@
                     <target>${maven.compiler.source}</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                    <filesets>
+                        <fileset>
+                            <directory>target</directory>
+                            <excludes>
+                                <exclude>container/**</exclude>
+                                <exclude>jira/**</exclude>
+                            </excludes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-    
     <properties>
         <jira.version>8.0.2</jira.version>
         <amps.version>8.0.2</amps.version>
+        <jira.servicedesk.application.version>4.0.2</jira.servicedesk.application.version>
+        <atlassian-rest-common>5.0.1</atlassian-rest-common>
         <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
         <!-- This property ensures consistency between the key in atlassian-plugin.xml and the OSGi bundle's key. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
+        <quick.reload.version>3.0.0</quick.reload.version>
         <!-- TestKit version 6.x for JIRA 6.x -->
         <testkit.version>6.3.11</testkit.version>
+        <ao.version>3.0.0</ao.version>
+        <junit.version>4.11</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
 </project>
