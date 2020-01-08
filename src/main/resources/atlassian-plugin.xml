@@ -18,7 +18,6 @@
         <resource type="download" name="images/" location="/images"/>
         <context>kitchen-duty-plugin</context>
     </web-resource>
-    
     <webwork1 key="kitchen-duty-planning-webwork-module" name="Kitchen Duty Planning Webwork Module"
               i18n-name-key="kitchen-duty-planning-webwork-module.name" roles-required="admin">
         <description key="kitchen-duty-planning-webwork-module.description">The Kitchen Duty Planning Webwork Module
@@ -33,21 +32,20 @@
             </action>
         </actions>
     </webwork1>
-    
-    <web-section key="admin-kitchen-duty-planning-section"
-                 name="admin-kitchen-duty-planning-section"
-                 location="admin_plugins_menu"
-                 weight="20"
+    <web-section key="admin-kitchen-duty-planning-section" name="admin-kitchen-duty-planning-section"
+                 location="admin_plugins_menu" weight="20"
                  i18n-name-key="kitchen-duty-plugin.admin.planning.page.web.section.name">
         <label key="kitchen-duty-plugin.admin.planning.page.web.section.name"/>
     </web-section>
-    
-    <web-item key="admin-kitchen-duty-planning-webitem"
-              name="admin-kitchen-duty-planning-webitem"
-              section="admin_plugins_menu/admin-kitchen-duty-planning-section"
-              weight="15"
+    <web-item key="admin-kitchen-duty-planning-webitem" name="admin-kitchen-duty-planning-webitem"
+              section="admin_plugins_menu/admin-kitchen-duty-planning-section" weight="15"
               i18n-name-key="kitchen-duty-plugin.admin.planning.page.web.item.name">
         <label key="kitchen-duty-plugin.admin.planning.page.web.item.name"/>
         <link linkId="admin-kitchen-duty-planning-webitem-link">/secure/KitchenDutyPlanningWebworkAction.jspa</link>
     </web-item>
+    <rest name="Kitchen Duty Resource" i18n-name-key="kitchen-duty-plugin.rest.resources.name"
+          key="kitchen-duty-resources" path="/kitchenduty" version="1.0">
+        <description key="kitchen-duty-plugin.rest.resources.description">All Kitchen Duty REST Resources</description>
+        <package>by.kalaputs.kitchen.duty.rest</package>
+    </rest>
 </atlassian-plugin>
