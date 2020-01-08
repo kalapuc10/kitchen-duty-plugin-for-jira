@@ -1,13 +1,25 @@
 package by.kalaputs.kitchen.duty.rest;
 
+import com.atlassian.crowd.integration.rest.entity.ErrorEntity;
+import com.atlassian.crowd.integration.rest.entity.PropertyEntity;
+import com.atlassian.jira.bc.user.search.UserSearchParams;
 import com.atlassian.jira.bc.user.search.UserSearchService;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
+@Named
 @Path("/user")
 public class UserSearchResource {
     private UserSearchService userSearchService;
@@ -21,9 +33,36 @@ public class UserSearchResource {
     }
 
     @GET
+    @Path("/health")
+    @Produces({MediaType.APPLICATION_JSON})
     @AnonymousAllowed
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getMessage() {
-        return Response.ok(new UserSearchResourceModel("Hello World")).build();
+    public Response health() {
+        return Response.ok().entity(new PropertyEntity("OK", "TEST")).build();
+    }
+
+    @GET
+    @Path("/search")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response searchUsers(@QueryParam("query") final String userQuery,
+                                @Context HttpServletRequest request
+
+    ) {
+        List<UserSearchResourceModel> users = findUsers(userQuery);
+        return Response.ok(users).build();
+    }
+
+    private List<UserSearchResourceModel> findUsers(String query) {
+        List<UserSearchResourceModel> userSearchResourceModels = new ArrayList<>();
+        UserSearchParams searchParams = UserSearchParams.builder()
+            .includeActive(true)
+            .sorted(true)
+            .build();
+        List<String> users = userSearchService.findUserNames(query, searchParams);
+        if (users != null) {
+            for (String user : users) {
+                userSearchResourceModels.add(new UserSearchResourceModel(user, user));
+            }
+        }
+        return userSearchResourceModels;
     }
 }
