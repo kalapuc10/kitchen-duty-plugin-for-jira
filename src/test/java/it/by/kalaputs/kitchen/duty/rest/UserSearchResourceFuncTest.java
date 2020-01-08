@@ -25,14 +25,5 @@ public class UserSearchResourceFuncTest {
 
     @Test
     public void messageIsValid() {
-        String baseUrl = System.getProperty("baseurl");
-        String resourceUrl = baseUrl + "/rest/kitchenduty/1.0/message";
-
-        RestClient client = new RestClient();
-        Resource resource = client.resource(resourceUrl);
-
-        UserSearchResourceModel message = resource.get(UserSearchResourceModel.class);
-
-        assertEquals("wrong message", "Hello World", message.getMessage());
     }
 }

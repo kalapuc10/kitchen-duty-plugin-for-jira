@@ -26,11 +26,5 @@ public class UserSearchResourceTest {
 
     @Test
     public void messageIsValid() {
-        UserSearchResource resource = new UserSearchResource();
-
-        Response response = resource.getMessage();
-        final UserSearchResourceModel message = (UserSearchResourceModel) response.getEntity();
-
-        assertEquals("wrong message", "Hello World", message.getMessage());
     }
 }
