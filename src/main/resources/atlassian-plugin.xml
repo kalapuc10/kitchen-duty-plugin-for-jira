@@ -20,7 +20,7 @@
     </web-resource>
     
     <webwork1 key="kitchen-duty-planning-webwork-module" name="Kitchen Duty Planning Webwork Module"
-              i18n-name-key="kitchen-duty-planning-webwork-module.name">
+              i18n-name-key="kitchen-duty-planning-webwork-module.name" roles-required="admin">
         <description key="kitchen-duty-planning-webwork-module.description">The Kitchen Duty Planning Webwork Module
             Plugin
         </description>
