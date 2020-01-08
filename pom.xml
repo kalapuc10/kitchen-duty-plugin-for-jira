@@ -6,8 +6,8 @@
     <artifactId>kitchen-duty-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <organization>
-        <name>Example Company</name>
-        <url>http://www.example.com/</url>
+        <name>Andrei Kalaputs</name>
+        <url>https://github.com/kalapuc10/</url>
     </organization>
     <name>kitchen-duty-plugin</name>
     <description>This is the by.kalaputs:kitchen-duty-plugin plugin for Atlassian JIRA.</description>
