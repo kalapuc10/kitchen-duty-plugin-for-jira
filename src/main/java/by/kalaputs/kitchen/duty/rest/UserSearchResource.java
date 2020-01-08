@@ -45,7 +45,6 @@ public class UserSearchResource {
     @Produces({MediaType.APPLICATION_JSON})
     public Response searchUsers(@QueryParam("query") final String userQuery,
                                 @Context HttpServletRequest request
-
     ) {
         List<UserSearchResourceModel> users = findUsers(userQuery);
         return Response.ok(users).build();
