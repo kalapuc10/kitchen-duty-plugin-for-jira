@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>by.kalaputs</groupId>
     <artifactId>kitchen-duty-plugin</artifactId>
@@ -138,6 +139,7 @@
                 <configuration>
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
+                    <productDataPath>${basedir}/src/test/resources/generated-test-resources.zip</productDataPath>
                     <!-- Uncomment to install TestKit backdoor in JIRA. -->
                     <!--
                     <pluginArtifacts>
@@ -162,7 +164,7 @@
                     <enablePde>false</enablePde>
                     <extractDependencies>false</extractDependencies>
                     <systemProperties>
-                        <atlassian.dev.mode>false</atlassian.dev.mode>
+                        <atlassian.dev.mode>${atlassian.dev.mode}</atlassian.dev.mode>
                     </systemProperties>
                     <!-- See here for an explanation of default instructions: -->
                     <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
@@ -171,10 +173,33 @@
                         <!-- Add package to export here -->
                         <Export-Package>by.kalaputs.kitchen.duty.api,</Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
+                        <Import-Package>
+                            org.springframework.osgi.*;resolution:=optional,
+                            org.eclipse.gemini.blueprint.*;resolution:=optional,
+                            *;resolution:=optional
+                        </Import-Package>
                         <!-- Ensure plugin is spring powered -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>
+                    <products>
+                        <product>
+                            <id>jira</id>
+                            <instanceId>jiraIT</instanceId>
+                            <version>${jira.version}</version>
+                            <productDataVersion>${jira.version}</productDataVersion>
+                        </product>
+                    </products>
+                    <testGroups>
+                        <testGroup>
+                            <id>integration</id>
+                            <productIds>
+                                <productId>jiraIT</productId>
+                            </productIds>
+                            <includes>
+                                <include>it/**/*Test.java</include>
+                            </includes>
+                        </testGroup>
+                    </testGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -190,6 +215,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <includeExclude>-com.atlassian.plugin.spring.scanner.annotation.*</includeExclude>
                     <scannedDependencies>
                         <dependency>
                             <groupId>com.atlassian.plugin</groupId>
@@ -243,5 +269,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <atlassian.dev.mode>false</atlassian.dev.mode>
     </properties>
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>fast</id>
+            <properties>
+                <atlassian.dev.mode>false</atlassian.dev.mode>
+            </properties>
+        </profile>
+    </profiles>
 </project>
