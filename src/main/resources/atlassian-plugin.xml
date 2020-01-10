@@ -61,4 +61,8 @@
         <description key="kitchen-duty-plugin.rest.resources.description">All Kitchen Duty REST Resources</description>
         <package>by.kalaputs.kitchen.duty.rest</package>
     </rest>
+    <ao key="ao-module">
+        <description>The module configuring the Active Objects service used by this plugin</description>
+        <entity>by.kalaputs.kitchen.duty.ao.Week</entity>
+    </ao>
 </atlassian-plugin>

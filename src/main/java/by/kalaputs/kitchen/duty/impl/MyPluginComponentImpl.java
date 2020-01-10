@@ -1,5 +1,6 @@
 package by.kalaputs.kitchen.duty.impl;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.bc.user.search.UserSearchService;
 import com.atlassian.plugin.spring.scanner.annotation.export.ExportAsService;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
@@ -19,6 +20,8 @@ public class MyPluginComponentImpl implements MyPluginComponent {
     private UserSearchService userSearchService;
     @ComponentImport
     private PageBuilderService pageBuilderService;
+    @ComponentImport
+    private ActiveObjects activeObjects;
 
     @Inject
     public MyPluginComponentImpl(final ApplicationProperties applicationProperties) {
