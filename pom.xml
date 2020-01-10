@@ -152,6 +152,12 @@
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
                     <productDataPath>${basedir}/src/test/resources/generated-test-resources.zip</productDataPath>
+                    <startupTimeout>1200000</startupTimeout>
+                    <useHttps>${useSSL}</useHttps>
+                    <httpsKeystoreFile>${project.basedir}/target/jira/home/jira.jks</httpsKeystoreFile>
+                    <httpsKeystorePass>password</httpsKeystorePass>
+                    <httpsKeyAlias>jira</httpsKeyAlias>
+                    <httpsPort>2990</httpsPort>
                     <!-- Uncomment to install TestKit backdoor in JIRA. -->
                     <!--
                     <pluginArtifacts>
@@ -165,8 +171,8 @@
                     <compressResources>false</compressResources>
                     <enableQuickReload>true</enableQuickReload>
                     <jvmArgs>-Xms4g -Xmx8g</jvmArgs>
-                    <skipITs>true</skipITs>
-                    <skipUTs>true</skipUTs>
+                    <skipITs>${skipTests}</skipITs>
+                    <skipUTs>${skipTests}</skipUTs>
                     <skipAllPrompts>true</skipAllPrompts>
                     <!-- This is sometimes handy to turn on for a faster jira and quick reload-->
                     <skipRestDocGeneration>true</skipRestDocGeneration>
@@ -176,6 +182,7 @@
                     <enablePde>false</enablePde>
                     <extractDependencies>false</extractDependencies>
                     <systemProperties>
+                        <atlassian.mail.senddisabled>true</atlassian.mail.senddisabled>
                         <atlassian.dev.mode>${atlassian.dev.mode}</atlassian.dev.mode>
                     </systemProperties>
                     <!-- See here for an explanation of default instructions: -->
@@ -265,7 +272,7 @@
         </plugins>
     </build>
     <properties>
-        <jira.version>8.0.2</jira.version>
+        <jira.version>8.5.3</jira.version>
         <amps.version>8.0.2</amps.version>
         <jira.servicedesk.application.version>4.0.2</jira.servicedesk.application.version>
         <atlassian-rest-common>5.0.1</atlassian-rest-common>
@@ -281,16 +288,31 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <atlassian.dev.mode>false</atlassian.dev.mode>
+        <atlassian.dev.mode>true</atlassian.dev.mode>
+        <useSSL>false</useSSL>
+        <skipTests>true</skipTests>
     </properties>
     <profiles>
         <profile>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <id>fast</id>
+            <id>dev</id>
             <properties>
                 <atlassian.dev.mode>false</atlassian.dev.mode>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <atlassian.dev.mode>false</atlassian.dev.mode>
+                <skipTests>false</skipTests>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <skipTests>false</skipTests>
             </properties>
         </profile>
     </profiles>
