@@ -6,8 +6,6 @@ import net.java.ao.Preload;
 import net.java.ao.schema.NotNull;
 import net.java.ao.schema.Unique;
 
-import java.util.List;
-
 @Preload
 public interface Week extends Entity {
     @NotNull
@@ -17,5 +15,5 @@ public interface Week extends Entity {
     void setWeek(Integer week);
 
     @ManyToMany(value = UserToWeek.class)
-    List<User> getUsers();
+    User[] getUsers();
 }
