@@ -8,12 +8,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "weeks")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class KitchenDutyPlanningResourceWeekModel {
-
     @XmlElement
     private Integer id;
 
     @XmlElement
     private Integer week;
+
+    public KitchenDutyPlanningResourceWeekModel() {
+    }
 
     public KitchenDutyPlanningResourceWeekModel(Integer id, Integer week) {
         this.id = id;

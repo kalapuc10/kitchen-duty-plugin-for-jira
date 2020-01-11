@@ -11,6 +11,9 @@ public class UserSearchResourceModel {
     @XmlElement
     private String id;
 
+    public UserSearchResourceModel() {
+    }
+
     public UserSearchResourceModel(String text, String id) {
         this.text = text;
         this.id = id;
