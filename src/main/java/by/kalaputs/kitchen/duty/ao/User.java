@@ -9,13 +9,13 @@ import net.java.ao.schema.Unique;
 import java.util.List;
 
 @Preload
-public interface Week extends Entity {
+public interface User extends Entity {
     @NotNull
     @Unique
-    Integer getWeek();
+    String getName();
 
-    void setWeek(Integer week);
+    void setName(String week);
 
     @ManyToMany(value = UserToWeek.class)
-    List<User> getUsers();
+    List<Week> getWeeks();
 }

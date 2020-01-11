@@ -2,7 +2,7 @@ package ut.by.kalaputs.kitchen.duty.rest;
 
 
 import by.kalaputs.kitchen.duty.rest.UserSearchResource;
-import by.kalaputs.kitchen.duty.rest.UserSearchResourceModel;
+import by.kalaputs.kitchen.duty.rest.model.UserSearchResourceModel;
 import com.atlassian.jira.bc.user.search.UserSearchParams;
 import com.atlassian.jira.bc.user.search.UserSearchService;
 import org.junit.After;
@@ -23,12 +23,10 @@ public class UserSearchResourceTest {
 
     @Before
     public void setup() {
-
     }
 
     @After
     public void tearDown() {
-
     }
 
     @Test

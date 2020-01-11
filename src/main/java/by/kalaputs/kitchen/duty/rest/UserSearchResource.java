@@ -1,6 +1,6 @@
 package by.kalaputs.kitchen.duty.rest;
 
-import com.atlassian.crowd.integration.rest.entity.ErrorEntity;
+import by.kalaputs.kitchen.duty.rest.model.UserSearchResourceModel;
 import com.atlassian.crowd.integration.rest.entity.PropertyEntity;
 import com.atlassian.jira.bc.user.search.UserSearchParams;
 import com.atlassian.jira.bc.user.search.UserSearchService;
@@ -27,9 +27,6 @@ public class UserSearchResource {
     @Inject
     public UserSearchResource(UserSearchService userSearchService) {
         this.userSearchService = userSearchService;
-    }
-
-    public UserSearchResource() {
     }
 
     @GET

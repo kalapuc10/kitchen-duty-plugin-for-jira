@@ -12,7 +12,6 @@ import javax.inject.Named;
 public class KitchenDutyPlanningWebworkAction extends JiraWebActionSupport {
     private static final Logger log = LoggerFactory.getLogger(KitchenDutyPlanningWebworkAction.class);
 
-    @Inject
     private PageBuilderService pageBuilderService;
 
     @Override
@@ -26,6 +25,7 @@ public class KitchenDutyPlanningWebworkAction extends JiraWebActionSupport {
         return "kitchen-duty-planning-success";
     }
 
+    @Inject
     public void setPageBuilderService(PageBuilderService pageBuilderService) {
         this.pageBuilderService = pageBuilderService;
     }

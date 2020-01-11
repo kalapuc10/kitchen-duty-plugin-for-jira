@@ -1,4 +1,4 @@
-package by.kalaputs.kitchen.duty.rest;
+package by.kalaputs.kitchen.duty.rest.model;
 
 import javax.xml.bind.annotation.*;
 
