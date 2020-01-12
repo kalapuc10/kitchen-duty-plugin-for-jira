@@ -34,7 +34,7 @@ public class KitchenDutyPlanningResource {
     @Produces({MediaType.APPLICATION_JSON})
     @AnonymousAllowed
     public Response getUsersForWeek(@PathParam("weekNumber") final Integer weekNumber) {
-        Week week = KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber);
+        Week week = activeObjects.executeInTransaction(() -> KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber));
         List<KitchenDutyPlanningResourceUserModel> users = new ArrayList<>();
         if (week != null)
             for (User user : week.getUsers())
@@ -47,29 +47,40 @@ public class KitchenDutyPlanningResource {
     @Path("/week/{weekNumber}/users")
     @Produces({MediaType.APPLICATION_JSON})
     @AnonymousAllowed
-    public Response addUserToWeek(@PathParam("weekNumber") final Integer weekNumber, final KitchenDutyPlanningResourceUserModel userParam) {
+    public Response addUserToWeek(@PathParam("weekNumber") final Integer weekNumber, final List<KitchenDutyPlanningResourceUserModel> userParams) {
         activeObjects.executeInTransaction(() -> {
             Week week = KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber);
             if (week == null) {
                 week = activeObjects.create(Week.class, new DBParam("WEEK", weekNumber));
                 week.save();
+                activeObjects.flush(week);
             }
 
-            User user = KitchenDutyActiveObjectHelper.findUniqueUser(activeObjects, userParam.getUsername());
-            if (user == null) {
-                user = activeObjects.create(User.class, new DBParam("NAME", userParam.getUsername()));
-                user.save();
+            UserToWeek[] existingRelationships = KitchenDutyActiveObjectHelper.findAllRelationships(activeObjects, week);
+            if (existingRelationships != null) {
+                for (UserToWeek existingRelationship : existingRelationships) {
+                    activeObjects.delete(existingRelationship);
+                    activeObjects.flush(existingRelationship);
+                }
             }
 
-            UserToWeek relationship = KitchenDutyActiveObjectHelper.findRelationship(activeObjects, user, week);
-            if (relationship != null) {
-                // relation already exists
-                return null;
+            for (KitchenDutyPlanningResourceUserModel userParam : userParams) {
+                User user = KitchenDutyActiveObjectHelper.findUniqueUser(activeObjects, userParam.getUsername());
+                if (user == null) {
+                    user = activeObjects.create(User.class, new DBParam("NAME", userParam.getUsername()));
+                    user.save();
+                    activeObjects.flush(user);
+                }
+
+                UserToWeek relationship = KitchenDutyActiveObjectHelper.findRelationship(activeObjects, user, week);
+                if (relationship == null) {
+                    relationship = activeObjects.create(UserToWeek.class);
+                    relationship.setUser(user);
+                    relationship.setWeek(week);
+                    relationship.save();
+                    activeObjects.flush(relationship);
+                }
             }
-            relationship = activeObjects.create(UserToWeek.class);
-            relationship.setUser(user);
-            relationship.setWeek(week);
-            relationship.save();
 
             return null;
         });

@@ -31,4 +31,8 @@ public class KitchenDutyActiveObjectHelper {
         }
         return null;
     }
+
+    public static UserToWeek[] findAllRelationships(ActiveObjects activeObjects, Week week) {
+        return activeObjects.find(UserToWeek.class, Query.select().where("WEEK_ID = ?", week.getID()));
+    }
 }
