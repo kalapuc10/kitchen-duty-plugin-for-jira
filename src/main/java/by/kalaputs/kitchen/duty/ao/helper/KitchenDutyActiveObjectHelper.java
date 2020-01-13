@@ -4,9 +4,9 @@ import by.kalaputs.kitchen.duty.ao.User;
 import by.kalaputs.kitchen.duty.ao.UserToWeek;
 import by.kalaputs.kitchen.duty.ao.Week;
 import com.atlassian.activeobjects.external.ActiveObjects;
-import com.atlassian.sal.api.transaction.TransactionCallback;
 import net.java.ao.Query;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +43,7 @@ public class KitchenDutyActiveObjectHelper {
         return activeObjects.executeInTransaction(() -> findUniqueWeek(activeObjects, weekNumber));
     }
 
+    @Nonnull
     public static List<User> getUsersAssignedToWeekInTransaction(ActiveObjects activeObjects, Week week) {
         List<User> users = new ArrayList<>();
         if (week != null) {
