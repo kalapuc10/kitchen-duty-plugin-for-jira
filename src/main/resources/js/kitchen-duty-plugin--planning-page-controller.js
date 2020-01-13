@@ -1,39 +1,46 @@
-var showSuccessFlag = function(message) {
+function showSuccessFlag(message) {
     // require(['aui/flag'], function(flag) {
-        AJS.flag({
-            type: 'success',
-            title: 'Kitchen Duty Plugin',
-            close: 'auto',
-            body: message
-        });
+    AJS.flag({
+        type: 'success',
+        title: 'Kitchen Duty Plugin',
+        close: 'auto',
+        body: message
+    });
     // });
-};
-var showErrorFlag = function(message) {
-    // require(['aui/flag'], function(flag) {
-        AJS.flag({
-            type: 'error',
-            title: 'Kitchen Duty Plugin',
-            close: 'auto',
-            body: message
-        });
-    // });
-};
+}
 
-var initUserSearch = function(weekNumber) {
+function showErrorFlag(message) {
+    // require(['aui/flag'], function(flag) {
+    AJS.flag({
+        type: 'error',
+        title: 'Kitchen Duty Plugin',
+        close: 'auto',
+        body: message
+    });
+    // });
+}
+
+function initUserSearch(weekNumber) {
     // Init SOY template
-    var planningPageWeekUsersTemplate = JIRA.Templates.KDP.planningPageWeekUsers({
+    const planningPageWeekUsersTemplate = JIRA.Templates.KDP.planningPageWeekUsers({
         week: weekNumber
     });
     AJS.$('#kdp-planning-page-week-users-container').html(planningPageWeekUsersTemplate);
 
     // Init actions
-    var auiUserSelectOptions = {
+    const auiUserSelectOptions = {
         ajax: {
-            url: function () { return window.KDPrestUrl + '/user/search'; },
+            url: function () {
+                return window.KDPrestUrl + '/user/search';
+            },
             dataType: 'json',
             delay: 250,
-            data: function (searchTerm) { return { query: searchTerm }; },
-            results: function (data) { return { results: data }; },
+            data: function (searchTerm) {
+                return {query: searchTerm};
+            },
+            results: function (data) {
+                return {results: data};
+            },
             cache: true
         },
         minimumInputLength: 1,
@@ -46,11 +53,11 @@ var initUserSearch = function(weekNumber) {
         AJS.$.ajax({
             url: window.KDPrestUrl + '/planning/week/' + weekNumber + '/users',
             dataType: 'json',
-            success: function(users) {
-                var selectedUserList = [];
+            success: function (users) {
+                const selectedUserList = [];
                 if (users !== null) {
-                    users.forEach(function(user) {
-                        selectedUserList.push({ id: user.username, text: user.username });
+                    users.forEach(function (user) {
+                        selectedUserList.push({id: user.username, text: user.username});
                     });
                     AJS.$('#kdp-user-select').select2('data', selectedUserList);
                 }
@@ -62,11 +69,11 @@ var initUserSearch = function(weekNumber) {
     AJS.$('#kdp-user-select-form').off(); // remove previous listeners
     AJS.$('#kdp-user-select-form').submit(function (e) {
         e.preventDefault();
-        var selectedUserList = [];
+        const selectedUserList = [];
         AJS.$(AJS.$('#kdp-user-select').select2('data')).each(function () {
             // we need to transform the JSON sent to the Endpoint since it
             // has to be in specific format
-            selectedUserList.push({ username: this.text });
+            selectedUserList.push({username: this.text});
         });
         AJS.$.ajax({
             url: window.KDPrestUrl + '/planning/week/' + weekNumber + '/users',
@@ -74,35 +81,34 @@ var initUserSearch = function(weekNumber) {
             contentType: 'application/json',
             data: JSON.stringify(selectedUserList),
             processData: false,
-            success: function() {
+            success: function () {
                 showSuccessFlag('Saved users for Week ' + weekNumber);
             },
-            error: function() {
+            error: function () {
                 showErrorFlag('Failed to save users for Week ' + weekNumber);
             }
         });
     });
-};
+}
 
-var initWeekPicker = function() {
+function initWeekPicker() {
     // Init SOY template
-    var planningPageWeekTemplate = JIRA.Templates.KDP.planningPageWeek();
+    const planningPageWeekTemplate = JIRA.Templates.KDP.planningPageWeek();
     AJS.$('#kdp-planning-page-week-container').html(planningPageWeekTemplate);
 
     // Init actions
     AJS.$('#week-picker').off(); // remove previous listeners
     AJS.$('#week-picker').datePicker({'overrideBrowserDefault': true});
-    AJS.$('#week-picker').change(function() {
-        var week = moment(AJS.$('#week-picker').val()).week();
+    AJS.$('#week-picker').change(function () {
+        let week = moment(AJS.$('#week-picker').val()).week();
         initUserSearch(week);
     });
-};
+}
 
-AJS.toInit(function(){
+AJS.toInit(function () {
     AJS.log('KDP: Planning Page Controller initializing ...');
-    var baseUrl = AJS.params.baseURL;
-    var restUrl = baseUrl + '/rest/kitchenduty/1.0';
-    window.KDPrestUrl = restUrl;
+    const baseUrl = AJS.params.baseURL;
+    window.KDPrestUrl = baseUrl + '/rest/kitchenduty/1.0';
 
     // set locale for moment-js so that week starts on sunday
     // and week numbers are correctly calculated
@@ -116,7 +122,7 @@ AJS.toInit(function(){
     console.log('Current moment locale: ' + moment().locale());
 
     // Init Base SOY template 
-    var planningPageTemplate = JIRA.Templates.KDP.planningPage();
+    const planningPageTemplate = JIRA.Templates.KDP.planningPage();
     AJS.$('#kdp-planning-page-container').html(planningPageTemplate);
 
     // Init child templates 
