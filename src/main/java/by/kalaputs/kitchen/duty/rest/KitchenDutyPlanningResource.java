@@ -9,6 +9,7 @@ import by.kalaputs.kitchen.duty.rest.model.KitchenDutyPlanningResourceWeekModel;
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.crowd.integration.rest.entity.PropertyEntity;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
+import com.atlassian.sal.api.user.UserManager;
 import net.java.ao.DBParam;
 
 import javax.inject.Inject;
@@ -21,19 +22,20 @@ import java.util.List;
 
 @Named
 @Path("/planning")
-public class KitchenDutyPlanningResource {
-    private ActiveObjects activeObjects;
-
+public class KitchenDutyPlanningResource extends BaseResource {
     @Inject
-    public KitchenDutyPlanningResource(ActiveObjects activeObjects) {
+    public KitchenDutyPlanningResource(ActiveObjects activeObjects, UserManager userManager) {
         this.activeObjects = activeObjects;
+        this.userManager = userManager;
     }
 
     @GET
     @Path("/week/{weekNumber}/users")
     @Produces({MediaType.APPLICATION_JSON})
-    @AnonymousAllowed
     public Response getUsersForWeek(@PathParam("weekNumber") final Integer weekNumber) {
+        if (this.isUserNotAdmin()) {
+            return getForbiddenErrorResponse();
+        }
         Week week = activeObjects.executeInTransaction(() -> KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber));
         List<KitchenDutyPlanningResourceUserModel> users = new ArrayList<>();
         if (week != null)
@@ -46,8 +48,10 @@ public class KitchenDutyPlanningResource {
     @PUT
     @Path("/week/{weekNumber}/users")
     @Produces({MediaType.APPLICATION_JSON})
-    @AnonymousAllowed
     public Response addUserToWeek(@PathParam("weekNumber") final Integer weekNumber, final List<KitchenDutyPlanningResourceUserModel> userParams) {
+        if (this.isUserNotAdmin()) {
+            return getForbiddenErrorResponse();
+        }
         activeObjects.executeInTransaction(() -> {
             Week week = KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber);
             if (week == null) {
@@ -90,8 +94,10 @@ public class KitchenDutyPlanningResource {
     @DELETE
     @Path("/week/{weekNumber}/users")
     @Produces({MediaType.APPLICATION_JSON})
-    @AnonymousAllowed
     public Response deleteUserFomWeek(@PathParam("weekNumber") final Integer weekNumber, final KitchenDutyPlanningResourceUserModel userParam) {
+        if (this.isUserNotAdmin()) {
+            return getForbiddenErrorResponse();
+        }
         activeObjects.executeInTransaction(() -> {
             Week week = KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber);
             if (week == null)
@@ -113,8 +119,10 @@ public class KitchenDutyPlanningResource {
     @GET
     @Path("/user/{username}/weeks")
     @Produces({MediaType.APPLICATION_JSON})
-    @AnonymousAllowed
     public Response getWeeksForUser(@PathParam("username") final String username) {
+        if (this.isUserNotAdmin()) {
+            return getForbiddenErrorResponse();
+        }
         User user = KitchenDutyActiveObjectHelper.findUniqueUser(activeObjects, username);
         List<KitchenDutyPlanningResourceWeekModel> weeks = new ArrayList<>();
         if (user != null)

@@ -6,6 +6,7 @@ import com.atlassian.plugin.spring.scanner.annotation.export.ExportAsService;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
 import by.kalaputs.kitchen.duty.api.MyPluginComponent;
+import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ public class MyPluginComponentImpl implements MyPluginComponent {
     private PageBuilderService pageBuilderService;
     @ComponentImport
     private ActiveObjects activeObjects;
+    @ComponentImport
+    protected UserManager userManager;
 
     @Inject
     public MyPluginComponentImpl(final ApplicationProperties applicationProperties) {
