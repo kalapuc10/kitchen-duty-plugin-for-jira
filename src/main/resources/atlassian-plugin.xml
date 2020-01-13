@@ -30,7 +30,7 @@
             </transformer>
         </transformation>
         <resource type="download" name="momentjs.js"
-                  location="/js/3rdparty/moment.js"/>
+                  location="/js/3rdparty/moment-2.24.0.min.js"/>
         <resource type="download" name="kitchen-duty-planning-soy.js"
                   location="/templates-soy/kitchen-duty-planning.soy"/>
         <resource type="download" name="kitchen-duty-plugin--planning-page-controller.js"
