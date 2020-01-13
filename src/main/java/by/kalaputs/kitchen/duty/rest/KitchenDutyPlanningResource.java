@@ -36,10 +36,10 @@ public class KitchenDutyPlanningResource extends BaseResource {
         if (this.isUserNotAdmin()) {
             return getForbiddenErrorResponse();
         }
-        Week week = activeObjects.executeInTransaction(() -> KitchenDutyActiveObjectHelper.findUniqueWeek(activeObjects, weekNumber));
+        Week week = KitchenDutyActiveObjectHelper.getWeekByWeekNumberInTransaction(activeObjects, weekNumber);
         List<KitchenDutyPlanningResourceUserModel> users = new ArrayList<>();
         if (week != null)
-            for (User user : week.getUsers())
+            for (User user : KitchenDutyActiveObjectHelper.getUsersAssignedToWeekInTransaction(activeObjects, week))
                 users.add(new KitchenDutyPlanningResourceUserModel(user.getID(), user.getName()));
 
         return Response.ok(users).build();

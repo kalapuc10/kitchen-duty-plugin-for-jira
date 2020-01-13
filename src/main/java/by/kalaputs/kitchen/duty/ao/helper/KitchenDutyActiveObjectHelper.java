@@ -4,10 +4,13 @@ import by.kalaputs.kitchen.duty.ao.User;
 import by.kalaputs.kitchen.duty.ao.UserToWeek;
 import by.kalaputs.kitchen.duty.ao.Week;
 import com.atlassian.activeobjects.external.ActiveObjects;
+import com.atlassian.sal.api.transaction.TransactionCallback;
 import net.java.ao.Query;
 
-public class KitchenDutyActiveObjectHelper {
+import java.util.ArrayList;
+import java.util.List;
 
+public class KitchenDutyActiveObjectHelper {
     public static Week findUniqueWeek(ActiveObjects activeObjects, Integer weekNumber) {
         Week[] weekRes = activeObjects.find(Week.class, Query.select().where("WEEK = ?", weekNumber));
         if ((weekRes != null && weekRes.length > 0)) {
@@ -34,5 +37,20 @@ public class KitchenDutyActiveObjectHelper {
 
     public static UserToWeek[] findAllRelationships(ActiveObjects activeObjects, Week week) {
         return activeObjects.find(UserToWeek.class, Query.select().where("WEEK_ID = ?", week.getID()));
+    }
+
+    public static Week getWeekByWeekNumberInTransaction(ActiveObjects activeObjects, Integer weekNumber) {
+        return activeObjects.executeInTransaction(() -> findUniqueWeek(activeObjects, weekNumber));
+    }
+
+    public static List<User> getUsersAssignedToWeekInTransaction(ActiveObjects activeObjects, Week week) {
+        List<User> users = new ArrayList<>();
+        if (week != null) {
+            UserToWeek[] relationships = activeObjects.executeInTransaction(() -> findAllRelationships(activeObjects, week));
+            if (relationships != null)
+                for (UserToWeek userToWeek : relationships)
+                    users.add(userToWeek.getUser());
+        }
+        return users;
     }
 }
