@@ -37,16 +37,54 @@
                   location="/js/kitchen-duty-plugin--planning-page-controller.js"/>
         <context>kitchen-duty-plugin</context>
     </web-resource>
+    <web-resource key="kitchen-duty-plugin-resources--overview-page"
+                  name="kitchen-duty-plugin Web Resources for Overview Page">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.auiplugin:soy</dependency>
+        <transformation extension="soy">
+            <transformer key="soyTransformer">
+                <functions>com.atlassian.confluence.plugins.soy:soy-core-functions</functions>
+            </transformer>
+        </transformation>
+        <resource type="download" name="momentjs.js"
+                  location="/js/3rdparty/moment-2.24.0.min.js"/>
+        <resource type="download" name="fullcalendar-core.js"
+                  location="/js/3rdparty/fullcalendar-core-4.3.1.min.js"/>
+        <resource type="download" name="fullcalendar-interaction.js"
+                  location="/js/3rdparty/fullcalendar-interaction-4.3.1.min.js"/>
+        <resource type="download" name="fullcalendar-daygrid.js"
+                  location="/js/3rdparty/fullcalendar-daygrid-4.3.1.min.js"/>
+        <resource type="download" name="fullcalendar-core.css"
+                  location="/css/3rdparty/fullcalendar-core-4.3.1.min.css"/>
+        <resource type="download" name="fullcalendar-daygrid.css"
+                  location="/css/3rdparty/fullcalendar-daygrid-4.3.1.min.css"/>
+        <resource type="download" name="kitchen-duty-overview-soy.js"
+                  location="templates-soy/kitchen-duty-overview.soy"/>
+        <resource type="download" name="kitchen-duty-plugin--overview-page-controller.js"
+                  location="/js/kitchen-duty-plugin--overview-page-controller.js"/>
+        <context>kitchen-duty-plugin</context>
+    </web-resource>
     <webwork1 key="kitchen-duty-planning-webwork-module" name="Kitchen Duty Planning Webwork Module"
               i18n-name-key="kitchen-duty-planning-webwork-module.name" roles-required="admin">
-        <description key="kitchen-duty-planning-webwork-module.description">The Kitchen Duty Planning Webwork Module
-            Plugin
+        <description key="kitchen-duty-planning-webwork-module.description">The Kitchen Duty Planning Webwork Module Plugin
         </description>
         <actions>
             <action name="by.kalaputs.kitchen.duty.webwork.KitchenDutyPlanningWebworkAction"
                     alias="KitchenDutyPlanningWebworkAction">
                 <view name="kitchen-duty-planning-success">
                     /templates/kitchen-duty-planning-webwork-module/kitchen-duty-planning-success.vm
+                </view>
+            </action>
+        </actions>
+    </webwork1>
+    <webwork1 key="kitchen-duty-overview-page-webwork-module" name="Kitchen Duty Overview Page Webwork Module"
+              i18n-name-key="kitchen-duty-overview-page-webwork-module.name" roles-required="use">
+        <description key="kitchen-duty-overview-page-webwork-module.description">The Kitchen Duty Overview Page Webwork Module Plugin</description>
+        <actions>
+            <action name="by.kalaputs.kitchen.duty.webwork.KitchenDutyOverviewPageWebworkAction"
+                    alias="KitchenDutyOverviewPageWebworkAction">
+                <view name="kitchen-duty-overview-page-success">
+                    /templates/kitchen-duty-overview-page-webwork-module/kitchen-duty-overview-page-success.vm
                 </view>
             </action>
         </actions>
@@ -61,6 +99,20 @@
               i18n-name-key="kitchen-duty-plugin.admin.planning.page.web.item.name">
         <label key="kitchen-duty-plugin.admin.planning.page.web.item.name"/>
         <link linkId="admin-kitchen-duty-planning-webitem-link">/secure/KitchenDutyPlanningWebworkAction.jspa</link>
+    </web-item>
+    <web-item key="admin-kitchen-duty-overview-webitem"
+              name="admin-kitchen-duty-overview-webitem"
+              section="admin_plugins_menu/admin-kitchen-duty-planning-section"
+              weight="14" i18n-name-key="kitchen-duty-plugin.admin.overview.page.web.item.name">
+        <label key="kitchen-duty-plugin.admin.overview.page.web.item.name"/>
+        <link linkId="admi-kitchen-duty-overview-webitem-link">/secure/KitchenDutyOverviewPageWebworkAction.jspa</link>
+    </web-item>
+    <web-item key="user-kitchen-duty-overview-webitem"
+              name="user-kitchen-duty-overview-webitem"
+              section="system.top.navigation.bar"
+              weight="60" i18n-name-key="kitchen-duty-plugin.user.overview.page.web.item.name">
+        <label key="kitchen-duty-plugin.user.overview.page.web.item.name"/>
+        <link linkId="user-kitchen-duty-overview-webitem-link">/secure/KitchenDutyOverviewPageWebworkAction.jspa</link>
     </web-item>
     <rest name="Kitchen Duty Resource" i18n-name-key="kitchen-duty-plugin.rest.resources.name"
           key="kitchen-duty-resources" path="/kitchenduty" version="1.0">

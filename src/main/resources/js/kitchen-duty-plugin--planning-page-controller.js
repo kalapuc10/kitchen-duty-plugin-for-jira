@@ -1,25 +1,3 @@
-function showSuccessFlag(message) {
-    // require(['aui/flag'], function(flag) {
-    AJS.flag({
-        type: 'success',
-        title: 'Kitchen Duty Plugin',
-        close: 'auto',
-        body: message
-    });
-    // });
-}
-
-function showErrorFlag(message) {
-    // require(['aui/flag'], function(flag) {
-    AJS.flag({
-        type: 'error',
-        title: 'Kitchen Duty Plugin',
-        close: 'auto',
-        body: message
-    });
-    // });
-}
-
 function initUserSearch(weekNumber) {
     // Init SOY template
     const planningPageWeekUsersTemplate = JIRA.Templates.KDP.planningPageWeekUsers({
