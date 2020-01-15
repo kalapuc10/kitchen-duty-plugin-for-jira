@@ -1,17 +1,13 @@
 package by.kalaputs.kitchen.duty.webwork;
 
-import com.atlassian.webresource.api.assembler.PageBuilderService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
+import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
 public class KitchenDutyPlanningWebworkAction extends JiraWebActionSupport {
-    private static final Logger log = LoggerFactory.getLogger(KitchenDutyPlanningWebworkAction.class);
-
     private PageBuilderService pageBuilderService;
 
     @Override

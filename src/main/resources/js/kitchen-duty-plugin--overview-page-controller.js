@@ -1,72 +1,40 @@
-AJS.toInit(function(){
-        // Init Base SOY template
-        var overviewPageTemplate = JIRA.Templates.KDO.overviewPage();
-        AJS.$('#kdp-overview-page-container').html(overviewPageTemplate);
+AJS.toInit(function () {
+    AJS.log('KDP: Overview Page Controller initializing ...');
+    const baseUrl = AJS.params.baseURL;
+    window.KDPrestUrl = baseUrl + '/rest/kitchenduty/1.0';
 
-        var calendarEl = document.getElementById('kdp-calendar');
+    // Init Base SOY template
+    const overviewPageTemplate = JIRA.Templates.KDO.overviewPage();
+    AJS.$('#kdp-overview-page-container').html(overviewPageTemplate);
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [ 'interaction', 'dayGrid' ],
-            defaultDate: '2019-08-12',
-            editable: true,
-            eventLimit: true, // allow "more" link when too many events
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: '2019-08-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2019-08-07',
-                    end: '2019-08-10'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2019-08-09T16:00:00'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2019-08-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2019-08-11',
-                    end: '2019-08-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2019-08-12T10:30:00',
-                    end: '2019-08-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2019-08-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2019-08-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2019-08-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2019-08-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2019-08-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2019-08-28'
+    const calendarEl = AJS.$('#kdp-calendar')[0];
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['interaction', 'dayGrid'],
+        weekNumbers: true,
+        height: 700,
+        fixedWeekCount: false,
+        events: function (info, successCallback, failureCallback) {
+            let year = moment(info.start).add('days', 10).format('YYYY');
+            let month = moment(info.start).add('days', 10).format('M');
+            AJS.$.ajax({
+                url: window.KDPrestUrl + '/overview_page/year/' + year + '/month/' + month,
+                dataType: 'json',
+                success: function (rawEvents) {
+                    let events = [];
+                    AJS.$(rawEvents).each(function () {
+                        let users = AJS.$(this).attr('users');
+                        events.push({
+                            title: users.join(', '),
+                            start: AJS.$(this).attr('start'),
+                            end: AJS.$(this).attr('end'),
+                            color: users.length > 0 ? '#36B37E' : '#FFAB00'
+                        });
+                    });
+                    successCallback(events);
                 }
-            ]
-        });
+            });
+        }
+    });
 
-        calendar.render();
+    calendar.render();
 });
