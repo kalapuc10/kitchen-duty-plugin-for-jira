@@ -78,7 +78,7 @@ function initWeekPicker() {
     AJS.$('#week-picker').off(); // remove previous listeners
     AJS.$('#week-picker').datePicker({'overrideBrowserDefault': true});
     AJS.$('#week-picker').change(function () {
-        let week = moment(AJS.$('#week-picker').val()).week();
+        let week = moment(AJS.$('#week-picker').val()).add('days', 1).isoWeek();
         initUserSearch(week);
     });
 }
